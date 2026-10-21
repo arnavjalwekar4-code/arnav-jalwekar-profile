@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>arn4v</title>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,14 @@
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
             user-select: none;
-            cursor: none; /* Custom particle cursor */
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (pointer: fine) {
+            * {
+                cursor: none; /* Custom particle cursor only on desktop devices */
+            }
         }
 
         body, html {
@@ -141,7 +148,7 @@
             padding: 0;
         }
 
-        .icon-btn:hover {
+        .icon-btn:hover, .icon-btn:active {
             background: rgba(255, 255, 255, 0.22);
             border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-2px) scale(1.05);
@@ -431,7 +438,7 @@
 </head>
 <body>
 
-    <!-- Particle Trail Canvas -->
+    <!-- Canvas Particle Cursor (Desktop Only) -->
     <canvas id="cursorCanvas"></canvas>
 
     <!-- Click-to-Enter Overlay -->
@@ -439,7 +446,7 @@
         <p>[ click anywhere to enter ]</p>
     </div>
 
-    <!-- Top Left Controls (Play/Pause, Equalizer Bars, Volume Slider) -->
+    <!-- Top Left Controls -->
     <div class="top-left-controls">
         <div class="icon-btn icon-btn-square" id="audioToggleBtn" title="Toggle Sound">
             <i class="fa-solid fa-volume-xmark" id="audioIcon"></i>
@@ -456,7 +463,7 @@
         </div>
     </div>
 
-    <!-- Top Right Portfolio Link -->
+    <!-- Top Right Portfolio Button -->
     <div class="top-right-controls">
         <a href="https://arnavjalwekar4-code.github.io/about-me/" target="_blank" class="icon-btn">
             <i class="fa-solid fa-briefcase"></i>
@@ -512,7 +519,7 @@
     </div>
 
     <!-- Background Song Track -->
-    <audio id="bgSong" loop preload="auto">
+    <audio id="bgSong" loop preload="auto" playsinline>
         <source src="song.mp4" type="audio/mp4">
     </audio>
 
@@ -530,17 +537,20 @@
             const mainWrapper = document.getElementById("mainWrapper");
 
             let isPlaying = false;
-            let wasPlayingBeforeLeave = false;
+            let siteEntered = false;
             bgSong.volume = 0.5;
 
             // Autoplay Background Video
             const playVideo = () => {
-                if (bgVideo) bgVideo.play().catch(err => console.log("Video wait click", err));
+                if (bgVideo) bgVideo.play().catch(() => {});
             };
             playVideo();
 
-            // Overlay Click to Enter
-            overlay.addEventListener("click", () => {
+            // Function to handle site enter on click or tap
+            const enterSite = (e) => {
+                if (siteEntered) return;
+                siteEntered = true;
+
                 overlay.classList.add("hidden");
                 mainWrapper.classList.add("visible");
                 playVideo();
@@ -548,22 +558,30 @@
                 bgSong.play().then(() => {
                     isPlaying = true;
                     updateAudioUI(true);
-                }).catch(err => console.log("Audio autoplay exception:", err));
-            });
+                }).catch(err => console.log("Audio unlock error:", err));
+            };
 
-            // Toggle Audio Play/Pause
-            audioToggleBtn.addEventListener("click", (e) => {
+            // Support both desktop click & mobile tap
+            overlay.addEventListener("click", enterSite);
+            overlay.addEventListener("touchstart", enterSite, { passive: true });
+
+            // Toggle Audio Play/Pause button
+            const toggleAudio = (e) => {
                 e.stopPropagation();
                 if (isPlaying) {
                     bgSong.pause();
                     isPlaying = false;
                     updateAudioUI(false);
                 } else {
-                    bgSong.play();
-                    isPlaying = true;
-                    updateAudioUI(true);
+                    bgSong.play().then(() => {
+                        isPlaying = true;
+                        updateAudioUI(true);
+                    }).catch(() => {});
                 }
-            });
+            };
+
+            audioToggleBtn.addEventListener("click", toggleAudio);
+            audioToggleBtn.addEventListener("touchstart", toggleAudio, { passive: true });
 
             // Volume Slider Control
             volumeSlider.addEventListener("input", (e) => {
@@ -576,23 +594,21 @@
                 }
             });
 
-            // Auto Pause on Tab Switch / Leave Page & Auto Play on Return
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    if (isPlaying) {
-                        wasPlayingBeforeLeave = true;
-                        bgSong.pause();
-                        isPlaying = false;
-                        updateAudioUI(false);
-                    }
-                } else {
-                    if (wasPlayingBeforeLeave) {
-                        bgSong.play().then(() => {
-                            isPlaying = true;
-                            updateAudioUI(true);
-                        }).catch(err => console.log("Resume audio error:", err));
-                        wasPlayingBeforeLeave = false;
-                    }
+            // FIXED: Only pause if user completely leaves the browser tab/app
+            window.addEventListener("pagehide", () => {
+                if (isPlaying) {
+                    bgSong.pause();
+                    isPlaying = false;
+                    updateAudioUI(false);
+                }
+            });
+
+            window.addEventListener("blur", () => {
+                // Pause only if user actually switches apps/windows
+                if (isPlaying && document.activeElement === document.body) {
+                    bgSong.pause();
+                    isPlaying = false;
+                    updateAudioUI(false);
                 }
             });
 
@@ -613,8 +629,10 @@
             fetchDiscordPresence();
             setInterval(fetchDiscordPresence, 8000);
 
-            // Particle Cursor Effect
-            initCursorEffect();
+            // Particle Cursor (Only if mouse/pointer available)
+            if (window.matchMedia("(pointer: fine)").matches) {
+                initCursorEffect();
+            }
         });
 
         function updateVisitorCounter() {
