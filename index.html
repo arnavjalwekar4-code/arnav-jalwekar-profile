@@ -98,12 +98,15 @@
             filter: brightness(0.75) contrast(1.05);
         }
 
-        /* Top Controls */
+        /* Top Controls Layout */
         .top-left-controls {
             position: fixed;
             top: 20px;
             left: 20px;
             z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .top-right-controls {
@@ -145,6 +148,70 @@
             box-shadow: 0 8px 25px rgba(0, 212, 255, 0.25);
         }
 
+        /* Volume Controls & Slider Container */
+        .volume-control-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            height: 42px;
+            padding: 0 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 70px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00dfd8;
+            box-shadow: 0 0 8px rgba(0, 223, 216, 0.8);
+        }
+
+        /* Song Equalizer Bars */
+        .equalizer-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 16px;
+            margin-left: 4px;
+        }
+
+        .eq-bar {
+            width: 3px;
+            height: 4px;
+            background: #00dfd8;
+            border-radius: 1px;
+            box-shadow: 0 0 6px rgba(0, 223, 216, 0.6);
+            transition: height 0.15s ease;
+        }
+
+        .eq-active .eq-bar:nth-child(1) { animation: eqBounce 0.6s ease-in-out infinite alternate; }
+        .eq-active .eq-bar:nth-child(2) { animation: eqBounce 0.8s ease-in-out infinite alternate 0.2s; }
+        .eq-active .eq-bar:nth-child(3) { animation: eqBounce 0.5s ease-in-out infinite alternate 0.1s; }
+        .eq-active .eq-bar:nth-child(4) { animation: eqBounce 0.7s ease-in-out infinite alternate 0.3s; }
+
+        @keyframes eqBounce {
+            0% { height: 4px; }
+            100% { height: 16px; }
+        }
+
         /* Bottom-Left View Counter */
         .view-counter {
             position: fixed;
@@ -163,10 +230,9 @@
             border-radius: 12px;
             z-index: 100;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            animation: floatSlow 4s ease-in-out infinite alternate;
         }
 
-        /* Main Profile Content Wrapper */
+        /* Main Profile Wrapper */
         .main-wrapper {
             position: relative;
             z-index: 10;
@@ -308,22 +374,6 @@
             overflow: hidden;
         }
 
-        .discord-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(30deg);
-            transition: transform 0.8s ease;
-        }
-
-        .discord-card:hover::before {
-            transform: rotate(30deg) translate(20%, 20%);
-        }
-
         .discord-card:hover {
             background: rgba(255, 255, 255, 0.18);
             border-color: rgba(255, 255, 255, 0.38);
@@ -381,7 +431,7 @@
 </head>
 <body>
 
-    <!-- Canvas Cursor particle trail -->
+    <!-- Particle Trail Canvas -->
     <canvas id="cursorCanvas"></canvas>
 
     <!-- Click-to-Enter Overlay -->
@@ -389,14 +439,24 @@
         <p>[ click anywhere to enter ]</p>
     </div>
 
-    <!-- Top Left Sound Toggle Button -->
+    <!-- Top Left Controls (Play/Pause, Equalizer Bars, Volume Slider) -->
     <div class="top-left-controls">
         <div class="icon-btn icon-btn-square" id="audioToggleBtn" title="Toggle Sound">
             <i class="fa-solid fa-volume-xmark" id="audioIcon"></i>
         </div>
+
+        <div class="volume-control-wrap">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+            <div class="equalizer-bars" id="eqContainer">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Top Right Portfolio Button -->
+    <!-- Top Right Portfolio Link -->
     <div class="top-right-controls">
         <a href="https://arnavjalwekar4-code.github.io/about-me/" target="_blank" class="icon-btn">
             <i class="fa-solid fa-briefcase"></i>
@@ -417,10 +477,10 @@
         </video>
     </div>
 
-    <!-- Main Profile Card Content -->
+    <!-- Main Content Container -->
     <div class="main-wrapper" id="mainWrapper">
         
-        <!-- Decorated Profile Avatar -->
+        <!-- Decorated Avatar -->
         <div class="avatar-wrap">
             <div class="avatar-deco-ring"></div>
             <img src="logo.png" id="mainPfp" alt="Arnav Profile" class="avatar">
@@ -438,7 +498,7 @@
             <i class="fa-solid fa-location-dot" style="font-size: 0.72rem; color: #00dfd8;"></i> los angeles vally
         </div>
 
-        <!-- Discord Live Status Card -->
+        <!-- Discord Live Card Widget -->
         <a href="https://discord.com/users/1540399501142134847" target="_blank" class="discord-card">
             <div class="discord-avatar-wrap">
                 <img src="logo.png" id="discordPfp" alt="Discord Avatar" class="discord-avatar">
@@ -451,7 +511,7 @@
         </a>
     </div>
 
-    <!-- Audio Element for song.mp4 -->
+    <!-- Background Song Track -->
     <audio id="bgSong" loop preload="auto">
         <source src="song.mp4" type="audio/mp4">
     </audio>
@@ -465,16 +525,17 @@
             const bgVideo = document.getElementById("bgVideo");
             const audioToggleBtn = document.getElementById("audioToggleBtn");
             const audioIcon = document.getElementById("audioIcon");
+            const volumeSlider = document.getElementById("volumeSlider");
+            const eqContainer = document.getElementById("eqContainer");
             const mainWrapper = document.getElementById("mainWrapper");
 
             let isPlaying = false;
+            let wasPlayingBeforeLeave = false;
             bgSong.volume = 0.5;
 
-            // Explicit video play trigger
+            // Autoplay Background Video
             const playVideo = () => {
-                if (bgVideo) {
-                    bgVideo.play().catch(err => console.log("Video waiting for user click", err));
-                }
+                if (bgVideo) bgVideo.play().catch(err => console.log("Video wait click", err));
             };
             playVideo();
 
@@ -486,34 +547,73 @@
 
                 bgSong.play().then(() => {
                     isPlaying = true;
-                    audioIcon.className = "fa-solid fa-volume-high";
-                }).catch(err => {
-                    console.log("Audio autoplay exception:", err);
-                });
+                    updateAudioUI(true);
+                }).catch(err => console.log("Audio autoplay exception:", err));
             });
 
-            // Toggle Audio Button
+            // Toggle Audio Play/Pause
             audioToggleBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
                 if (isPlaying) {
                     bgSong.pause();
                     isPlaying = false;
-                    audioIcon.className = "fa-solid fa-volume-xmark";
+                    updateAudioUI(false);
                 } else {
                     bgSong.play();
                     isPlaying = true;
+                    updateAudioUI(true);
+                }
+            });
+
+            // Volume Slider Control
+            volumeSlider.addEventListener("input", (e) => {
+                const vol = parseFloat(e.target.value);
+                bgSong.volume = vol;
+                if (vol === 0) {
+                    audioIcon.className = "fa-solid fa-volume-xmark";
+                } else if (isPlaying) {
                     audioIcon.className = "fa-solid fa-volume-high";
                 }
             });
 
-            // View Counter Logic
+            // Auto Pause on Tab Switch / Leave Page & Auto Play on Return
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    if (isPlaying) {
+                        wasPlayingBeforeLeave = true;
+                        bgSong.pause();
+                        isPlaying = false;
+                        updateAudioUI(false);
+                    }
+                } else {
+                    if (wasPlayingBeforeLeave) {
+                        bgSong.play().then(() => {
+                            isPlaying = true;
+                            updateAudioUI(true);
+                        }).catch(err => console.log("Resume audio error:", err));
+                        wasPlayingBeforeLeave = false;
+                    }
+                }
+            });
+
+            function updateAudioUI(active) {
+                if (active) {
+                    audioIcon.className = "fa-solid fa-volume-high";
+                    eqContainer.classList.add("eq-active");
+                } else {
+                    audioIcon.className = "fa-solid fa-volume-xmark";
+                    eqContainer.classList.remove("eq-active");
+                }
+            }
+
+            // Visitor Counter
             updateVisitorCounter();
 
-            // Discord Live Lanyard Sync
+            // Fetch Real-time Discord Status via Lanyard API
             fetchDiscordPresence();
             setInterval(fetchDiscordPresence, 8000);
 
-            // Cursor Particles
+            // Particle Cursor Effect
             initCursorEffect();
         });
 
@@ -569,7 +669,6 @@
             }
         }
 
-        // Particle Cursor Animation Effect
         function initCursorEffect() {
             const canvas = document.getElementById("cursorCanvas");
             const ctx = canvas.getContext("2d");
@@ -630,7 +729,6 @@
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                // Cursor Ring
                 ctx.globalAlpha = 0.8;
                 ctx.strokeStyle = "rgba(0, 223, 216, 0.8)";
                 ctx.lineWidth = 1.5;
