@@ -7,7 +7,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -22,53 +22,73 @@
 
         @media (pointer: fine) {
             * {
-                cursor: none; /* Custom particle cursor only on desktop devices */
+                cursor: none;
             }
         }
 
         body, html {
             width: 100%;
-            height: 100%;
+            height: 100dvh;
             overflow: hidden;
-            background-color: #050505;
+            background-color: #050208;
             color: #ffffff;
         }
 
-        /* Particle Cursor Canvas */
+        /* Falling Snow Canvas */
+        #snowCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Custom Pink Cursor Canvas */
         #cursorCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             pointer-events: none;
             z-index: 99999;
         }
 
-        /* Click to Enter Screen Overlay */
+        /* Click to Enter Overlay */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            height: 100dvh;
+            background: rgba(5, 2, 8, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 15px;
             z-index: 9999;
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s ease;
         }
 
+        .overlay-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            color: #ff007f;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
+        }
+
         .overlay p {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
             animation: pulseText 2s infinite ease-in-out;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         @keyframes pulseText {
@@ -88,7 +108,7 @@
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 100dvh;
             z-index: 1;
             overflow: hidden;
             background: #000;
@@ -102,7 +122,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            filter: brightness(0.75) contrast(1.05);
+            filter: brightness(0.55) contrast(1.2) saturate(1.2);
         }
 
         /* Top Controls Layout */
@@ -124,10 +144,10 @@
         }
 
         .icon-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(20, 8, 25, 0.65);
+            border: 1px solid rgba(255, 0, 127, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             color: white;
             height: 42px;
             padding: 0 16px;
@@ -137,10 +157,10 @@
             align-items: center;
             gap: 8px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 127, 0.15);
         }
 
         .icon-btn-square {
@@ -149,36 +169,35 @@
         }
 
         .icon-btn:hover, .icon-btn:active {
-            background: rgba(255, 255, 255, 0.22);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 0, 127, 0.3);
+            border-color: rgba(255, 0, 127, 0.8);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.25);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.6);
         }
 
-        /* Volume Controls & Slider Container */
+        /* Volume Control Wrap */
         .volume-control-wrap {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(20, 8, 25, 0.65);
+            border: 1px solid rgba(255, 0, 127, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             height: 42px;
             padding: 0 12px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
         }
 
         .volume-slider {
             -webkit-appearance: none;
             appearance: none;
-            width: 70px;
+            width: 65px;
             height: 4px;
             border-radius: 2px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             outline: none;
-            transition: background 0.2s;
         }
 
         .volume-slider::-webkit-slider-thumb {
@@ -187,36 +206,8 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #00dfd8;
-            box-shadow: 0 0 8px rgba(0, 223, 216, 0.8);
-        }
-
-        /* Song Equalizer Bars */
-        .equalizer-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            height: 16px;
-            margin-left: 4px;
-        }
-
-        .eq-bar {
-            width: 3px;
-            height: 4px;
-            background: #00dfd8;
-            border-radius: 1px;
-            box-shadow: 0 0 6px rgba(0, 223, 216, 0.6);
-            transition: height 0.15s ease;
-        }
-
-        .eq-active .eq-bar:nth-child(1) { animation: eqBounce 0.6s ease-in-out infinite alternate; }
-        .eq-active .eq-bar:nth-child(2) { animation: eqBounce 0.8s ease-in-out infinite alternate 0.2s; }
-        .eq-active .eq-bar:nth-child(3) { animation: eqBounce 0.5s ease-in-out infinite alternate 0.1s; }
-        .eq-active .eq-bar:nth-child(4) { animation: eqBounce 0.7s ease-in-out infinite alternate 0.3s; }
-
-        @keyframes eqBounce {
-            0% { height: 4px; }
-            100% { height: 16px; }
+            background: #ff007f;
+            box-shadow: 0 0 10px #ff007f;
         }
 
         /* Bottom-Left View Counter */
@@ -229,17 +220,17 @@
             gap: 8px;
             font-size: 0.85rem;
             color: rgba(255, 255, 255, 0.9);
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: rgba(20, 8, 25, 0.65);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             padding: 8px 16px;
             border-radius: 12px;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
         }
 
-        /* Main Profile Wrapper */
+        /* Main Profile Content Wrapper */
         .main-wrapper {
             position: relative;
             z-index: 10;
@@ -247,67 +238,87 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: 100dvh;
             padding: 20px;
             text-align: center;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(20px) scale(0.98);
             transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .main-wrapper.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
-        /* Animated Profile Avatar Ring */
+        /* Pink Cyber Aura Profile Avatar Effects */
         .avatar-wrap {
             position: relative;
-            width: 110px;
-            height: 110px;
-            margin-bottom: 16px;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 18px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .avatar-deco-ring {
+        .pink-aura-outer {
             position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
+            top: -14px; left: -14px; right: -14px; bottom: -14px;
             border-radius: 50%;
-            background: conic-gradient(from 0deg, #ff007f, #7928ca, #00dfd8, #ff007f);
-            animation: spinRing 3s linear infinite, glowPulse 2s ease-in-out infinite alternate;
-            filter: blur(4px);
-            opacity: 0.9;
+            background: conic-gradient(from 0deg, #ff007f, #ff00c8, #9900ff, #ff007f);
+            animation: spinAura 6s linear infinite, pinkPulse 2s ease-in-out infinite alternate;
+            filter: blur(10px);
+            opacity: 0.85;
         }
 
-        @keyframes spinRing {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .pink-aura-ring {
+            position: absolute;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border-radius: 50%;
+            border: 2px dashed #ff007f;
+            animation: spinCounter 10s linear infinite;
+            filter: drop-shadow(0 0 8px #ff007f);
         }
 
-        @keyframes glowPulse {
-            0% { filter: blur(3px) brightness(1); }
-            100% { filter: blur(7px) brightness(1.4); }
+        @keyframes spinAura { 100% { transform: rotate(360deg); } }
+        @keyframes spinCounter { 100% { transform: rotate(-360deg); } }
+        @keyframes pinkPulse {
+            0% { filter: blur(8px) brightness(1); opacity: 0.75; }
+            100% { filter: blur(16px) brightness(1.8); opacity: 1; }
         }
 
         .avatar {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 106px;
+            height: 106px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.95);
             z-index: 2;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-            transition: transform 0.4s ease;
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.8);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .avatar-wrap:hover .avatar {
-            transform: scale(1.05) rotate(2deg);
+            transform: scale(1.08) rotate(3deg);
+        }
+
+        .dev-tag {
+            position: absolute;
+            bottom: -8px;
+            background: rgba(255, 0, 127, 0.3);
+            border: 1px solid #ff007f;
+            backdrop-filter: blur(10px);
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.68rem;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
         }
 
         /* Username & Verified Badge */
@@ -315,30 +326,24 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             justify-content: center;
         }
 
         .username {
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-size: 1.9rem;
+            font-weight: 800;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            text-shadow: 0 0 20px rgba(255, 0, 127, 0.8);
+            background: linear-gradient(135deg, #ffffff 30%, #ff2a8d 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .verified-badge {
-            color: #00dfd8;
-            font-size: 1.2rem;
-            filter: drop-shadow(0 0 10px rgba(0, 223, 216, 0.8));
-            animation: bounceSoft 3s ease-in-out infinite;
-        }
-
-        @keyframes bounceSoft {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+            color: #ff007f;
+            font-size: 1.25rem;
+            filter: drop-shadow(0 0 12px rgba(255, 0, 127, 0.9));
         }
 
         /* Bio & Location */
@@ -347,15 +352,14 @@
             color: rgba(255, 255, 255, 0.95);
             line-height: 1.45;
             max-width: 400px;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-            font-weight: 400;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
         }
 
         .location {
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 24px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -363,29 +367,28 @@
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
         }
 
-        /* Guns.lol Style Discord Pill Widget */
+        /* Discord Pill Widget */
         .discord-card {
             display: flex;
             align-items: center;
             gap: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(20, 8, 25, 0.6);
+            border: 1px solid rgba(255, 0, 127, 0.35);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             padding: 10px 20px 10px 12px;
-            border-radius: 24px;
+            border-radius: 22px;
             text-decoration: none;
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            margin-bottom: 16px;
         }
 
         .discord-card:hover {
-            background: rgba(255, 255, 255, 0.18);
-            border-color: rgba(255, 255, 255, 0.38);
+            background: rgba(255, 0, 127, 0.25);
+            border-color: rgba(255, 0, 127, 0.7);
             transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 16px 45px rgba(0, 223, 216, 0.2);
+            box-shadow: 0 16px 45px rgba(255, 0, 127, 0.4);
         }
 
         .discord-avatar-wrap {
@@ -413,36 +416,114 @@
             box-shadow: 0 0 8px rgba(35, 165, 90, 0.8);
         }
 
-        .status-online { background-color: #23a55a; box-shadow: 0 0 8px rgba(35, 165, 90, 0.8); }
-        .status-idle { background-color: #f0b232; box-shadow: 0 0 8px rgba(240, 178, 50, 0.8); }
-        .status-dnd { background-color: #f23f43; box-shadow: 0 0 8px rgba(242, 63, 67, 0.8); }
+        .status-online { background-color: #23a55a; }
+        .status-idle { background-color: #f0b232; }
+        .status-dnd { background-color: #f23f43; }
         .status-offline { background-color: #747f8d; }
 
-        .discord-text {
+        .discord-text { text-align: left; }
+        .discord-username { font-size: 0.88rem; font-weight: 600; color: #ffffff; }
+        .discord-status { font-size: 0.74rem; color: rgba(255, 255, 255, 0.75); }
+
+        /* Interactive Music Player Card (Inspired by Reference Screenshot) */
+        .music-player-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(20, 8, 25, 0.65);
+            border: 1px solid rgba(255, 0, 127, 0.35);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 12px 18px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .music-icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 0, 127, 0.2);
+            border: 1px solid rgba(255, 0, 127, 0.5);
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #ff007f;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+        }
+
+        .music-info {
+            flex: 1;
             text-align: left;
         }
 
-        .discord-username {
+        .song-title {
             font-size: 0.88rem;
-            font-weight: 600;
+            font-weight: 700;
             color: #ffffff;
-            line-height: 1.2;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
         }
 
-        .discord-status {
-            font-size: 0.74rem;
-            color: rgba(255, 255, 255, 0.75);
-            line-height: 1.2;
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #ff007f;
+            box-shadow: 0 0 10px #ff007f;
+            transition: width 0.1s linear;
+        }
+
+        .time-display {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+        }
+
+        .music-controls i {
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .music-controls i:hover {
+            color: #ff007f;
+            transform: scale(1.15);
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas Particle Cursor (Desktop Only) -->
+    <!-- Falling Snow Particles Canvas -->
+    <canvas id="snowCanvas"></canvas>
+
+    <!-- Canvas Pink Cursor -->
     <canvas id="cursorCanvas"></canvas>
 
     <!-- Click-to-Enter Overlay -->
     <div id="overlay" class="overlay">
+        <div class="overlay-title">&lt;ARN4V.DEV /&gt;</div>
         <p>[ click anywhere to enter ]</p>
     </div>
 
@@ -454,19 +535,13 @@
 
         <div class="volume-control-wrap">
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
-            <div class="equalizer-bars" id="eqContainer">
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-            </div>
         </div>
     </div>
 
     <!-- Top Right Portfolio Button -->
     <div class="top-right-controls">
         <a href="https://arnavjalwekar4-code.github.io/about-me/" target="_blank" class="icon-btn">
-            <i class="fa-solid fa-briefcase"></i>
+            <i class="fa-solid fa-code"></i>
             <span>Portfolio</span>
         </a>
     </div>
@@ -474,38 +549,40 @@
     <!-- Bottom Left View Counter -->
     <div class="view-counter">
         <i class="fa-solid fa-eye"></i>
-        <span id="visitCount">1,248</span>
+        <span id="visitCount">12</span>
     </div>
 
-    <!-- Background Video Tag -->
+    <!-- Fullscreen Video Background -->
     <div class="bg-container">
         <video id="bgVideo" autoplay muted loop playsinline class="bg-video">
             <source src="baground.mp4" type="video/mp4">
         </video>
     </div>
 
-    <!-- Main Content Container -->
+    <!-- Main Profile Content Container -->
     <div class="main-wrapper" id="mainWrapper">
         
-        <!-- Decorated Avatar -->
+        <!-- Pink Aura Profile Avatar -->
         <div class="avatar-wrap">
-            <div class="avatar-deco-ring"></div>
+            <div class="pink-aura-outer"></div>
+            <div class="pink-aura-ring"></div>
             <img src="logo.png" id="mainPfp" alt="Arnav Profile" class="avatar">
+            <div class="dev-tag">DEV</div>
         </div>
 
         <!-- Username & Verified Badge -->
         <div class="username-container">
             <h1 class="username">Arnav</h1>
-            <i class="fa-solid fa-circle-check verified-badge" title="Verified"></i>
+            <i class="fa-solid fa-circle-check verified-badge" title="Verified Developer"></i>
         </div>
 
         <p class="bio" id="userBio">just a dev with big dreams ♡ no ego, just code & kindness ☁️</p>
 
         <div class="location">
-            <i class="fa-solid fa-location-dot" style="font-size: 0.72rem; color: #00dfd8;"></i> los angeles vally
+            <i class="fa-solid fa-location-dot" style="font-size: 0.75rem; color: #ff007f;"></i> los angeles vally
         </div>
 
-        <!-- Discord Live Card Widget -->
+        <!-- Discord Card Widget -->
         <a href="https://discord.com/users/1540399501142134847" target="_blank" class="discord-card">
             <div class="discord-avatar-wrap">
                 <img src="logo.png" id="discordPfp" alt="Discord Avatar" class="discord-avatar">
@@ -516,9 +593,32 @@
                 <div class="discord-status" id="discordCustomStatus">Online</div>
             </div>
         </a>
+
+        <!-- Interactive Reference-Style Music Player Card -->
+        <div class="music-player-card">
+            <div class="music-icon-box">
+                <i class="fa-solid fa-music"></i>
+            </div>
+            <div class="music-info">
+                <div class="song-title">Whine in Brazil</div>
+                <div class="progress-bar-container" id="progressBarContainer">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">0:00</span>
+                    <span id="durationTime">2:55</span>
+                </div>
+            </div>
+            <div class="music-controls">
+                <i class="fa-solid fa-backward-step"></i>
+                <i class="fa-solid fa-play" id="cardPlayBtn"></i>
+                <i class="fa-solid fa-forward-step"></i>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Background Song Track -->
+    <!-- Audio Element -->
     <audio id="bgSong" loop preload="auto" playsinline>
         <source src="song.mp4" type="audio/mp4">
     </audio>
@@ -532,22 +632,25 @@
             const bgVideo = document.getElementById("bgVideo");
             const audioToggleBtn = document.getElementById("audioToggleBtn");
             const audioIcon = document.getElementById("audioIcon");
+            const cardPlayBtn = document.getElementById("cardPlayBtn");
             const volumeSlider = document.getElementById("volumeSlider");
-            const eqContainer = document.getElementById("eqContainer");
             const mainWrapper = document.getElementById("mainWrapper");
+            const progressBarFill = document.getElementById("progressBarFill");
+            const progressBarContainer = document.getElementById("progressBarContainer");
+            const currentTimeEl = document.getElementById("currentTime");
+            const durationTimeEl = document.getElementById("durationTime");
 
             let isPlaying = false;
+            let wasPlayingBeforeTabSwitch = false;
             let siteEntered = false;
             bgSong.volume = 0.5;
 
-            // Autoplay Background Video
             const playVideo = () => {
                 if (bgVideo) bgVideo.play().catch(() => {});
             };
             playVideo();
 
-            // Function to handle site enter on click or tap
-            const enterSite = (e) => {
+            const enterSite = () => {
                 if (siteEntered) return;
                 siteEntered = true;
 
@@ -561,13 +664,11 @@
                 }).catch(err => console.log("Audio unlock error:", err));
             };
 
-            // Support both desktop click & mobile tap
             overlay.addEventListener("click", enterSite);
             overlay.addEventListener("touchstart", enterSite, { passive: true });
 
-            // Toggle Audio Play/Pause button
             const toggleAudio = (e) => {
-                e.stopPropagation();
+                if (e) e.stopPropagation();
                 if (isPlaying) {
                     bgSong.pause();
                     isPlaying = false;
@@ -581,9 +682,8 @@
             };
 
             audioToggleBtn.addEventListener("click", toggleAudio);
-            audioToggleBtn.addEventListener("touchstart", toggleAudio, { passive: true });
+            cardPlayBtn.addEventListener("click", toggleAudio);
 
-            // Volume Slider Control
             volumeSlider.addEventListener("input", (e) => {
                 const vol = parseFloat(e.target.value);
                 bgSong.volume = vol;
@@ -594,42 +694,66 @@
                 }
             });
 
-            // FIXED: Only pause if user completely leaves the browser tab/app
-            window.addEventListener("pagehide", () => {
-                if (isPlaying) {
-                    bgSong.pause();
-                    isPlaying = false;
-                    updateAudioUI(false);
+            // Music Player Time & Progress Bar Updater
+            bgSong.addEventListener("timeupdate", () => {
+                if (bgSong.duration) {
+                    const progressPercent = (bgSong.currentTime / bgSong.duration) * 100;
+                    progressBarFill.style.width = `${progressPercent}%`;
+                    currentTimeEl.textContent = formatTime(bgSong.currentTime);
+                    durationTimeEl.textContent = formatTime(bgSong.duration);
                 }
             });
 
-            window.addEventListener("blur", () => {
-                // Pause only if user actually switches apps/windows
-                if (isPlaying && document.activeElement === document.body) {
-                    bgSong.pause();
-                    isPlaying = false;
-                    updateAudioUI(false);
+            progressBarContainer.addEventListener("click", (e) => {
+                const rect = progressBarContainer.getBoundingClientRect();
+                const clickPosition = (e.clientX - rect.left) / rect.width;
+                if (bgSong.duration) {
+                    bgSong.currentTime = clickPosition * bgSong.duration;
+                }
+            });
+
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Auto-pause when leaving tab & auto-resume when returning
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    if (isPlaying) {
+                        wasPlayingBeforeTabSwitch = true;
+                        bgSong.pause();
+                        isPlaying = false;
+                        updateAudioUI(false);
+                    }
+                } else {
+                    if (wasPlayingBeforeTabSwitch) {
+                        bgSong.play().then(() => {
+                            isPlaying = true;
+                            updateAudioUI(true);
+                        }).catch(() => {});
+                        wasPlayingBeforeTabSwitch = false;
+                    }
                 }
             });
 
             function updateAudioUI(active) {
                 if (active) {
                     audioIcon.className = "fa-solid fa-volume-high";
-                    eqContainer.classList.add("eq-active");
+                    cardPlayBtn.className = "fa-solid fa-pause";
                 } else {
                     audioIcon.className = "fa-solid fa-volume-xmark";
-                    eqContainer.classList.remove("eq-active");
+                    cardPlayBtn.className = "fa-solid fa-play";
                 }
             }
 
-            // Visitor Counter
             updateVisitorCounter();
-
-            // Fetch Real-time Discord Status via Lanyard API
             fetchDiscordPresence();
             setInterval(fetchDiscordPresence, 8000);
 
-            // Particle Cursor (Only if mouse/pointer available)
+            initSnowEffect();
+
             if (window.matchMedia("(pointer: fine)").matches) {
                 initCursorEffect();
             }
@@ -638,7 +762,7 @@
         function updateVisitorCounter() {
             let count = localStorage.getItem("site_page_views");
             if (!count) {
-                count = 1248;
+                count = 12;
             } else {
                 count = parseInt(count) + 1;
             }
@@ -687,6 +811,56 @@
             }
         }
 
+        // Falling Snow / Aura Particle Effect (From Reference Screenshot)
+        function initSnowEffect() {
+            const canvas = document.getElementById("snowCanvas");
+            const ctx = canvas.getContext("2d");
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener("resize", () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const numFlakes = 45;
+            const flakes = [];
+
+            for (let i = 0; i < numFlakes; i++) {
+                flakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 2.5 + 1,
+                    d: Math.random() * 1 + 0.5,
+                    opacity: Math.random() * 0.7 + 0.3
+                });
+            }
+
+            function drawFlakes() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+
+                for (let i = 0; i < numFlakes; i++) {
+                    const f = flakes[i];
+                    ctx.globalAlpha = f.opacity;
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    f.y += f.d;
+                    f.x += Math.sin(f.y * 0.02) * 0.5;
+
+                    if (f.y > height) {
+                        flakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d, opacity: f.opacity };
+                    }
+                }
+                requestAnimationFrame(drawFlakes);
+            }
+            drawFlakes();
+        }
+
+        // Pink Glowing Particle Cursor Effect
         function initCursorEffect() {
             const canvas = document.getElementById("cursorCanvas");
             const ctx = canvas.getContext("2d");
@@ -711,22 +885,16 @@
                 }
             });
 
-            window.addEventListener("click", (e) => {
-                for (let i = 0; i < 18; i++) {
-                    particles.push(new Particle(e.clientX, e.clientY, true));
-                }
-            });
-
             class Particle {
-                constructor(x, y, isBurst = false) {
+                constructor(x, y) {
                     this.x = x;
                     this.y = y;
-                    this.size = isBurst ? Math.random() * 4 + 2 : Math.random() * 2.5 + 1;
-                    this.speedX = isBurst ? (Math.random() - 0.5) * 7 : (Math.random() - 0.5) * 1.5;
-                    this.speedY = isBurst ? (Math.random() - 0.5) * 7 : (Math.random() - 0.5) * 1.5;
+                    this.size = Math.random() * 2.5 + 1;
+                    this.speedX = (Math.random() - 0.5) * 1.5;
+                    this.speedY = (Math.random() - 0.5) * 1.5;
                     this.life = 1;
                     this.decay = Math.random() * 0.02 + 0.015;
-                    this.color = `hsl(${Math.random() * 60 + 170}, 100%, 70%)`;
+                    this.color = `#ff007f`;
                 }
 
                 update() {
@@ -747,8 +915,8 @@
             function animate() {
                 ctx.clearRect(0, 0, width, height);
 
-                ctx.globalAlpha = 0.8;
-                ctx.strokeStyle = "rgba(0, 223, 216, 0.8)";
+                ctx.globalAlpha = 0.85;
+                ctx.strokeStyle = "rgba(255, 0, 127, 0.9)";
                 ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.arc(mouse.x, mouse.y, 9, 0, Math.PI * 2);
