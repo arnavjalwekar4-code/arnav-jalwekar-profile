@@ -256,7 +256,7 @@
             position: relative;
             width: 130px;
             height: 130px;
-            margin-bottom: 18px;
+            margin-bottom: 22px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -304,16 +304,62 @@
             transform: scale(1.08) rotate(3deg);
         }
 
+        /* Floating Thought Bubble Badge - Positioned Above Middle with Distance */
+        .pfp-status-bubble {
+            position: absolute;
+            top: -22px;
+            right: -25px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 6px 14px;
+            border-radius: 18px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 255, 255, 0.7);
+            animation: floatBubbleAbove 3s ease-in-out infinite alternate;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Tail Pointing Down Towards Avatar */
+        .pfp-status-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 16px;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 1);
+            border-right: 1px solid rgba(255, 255, 255, 1);
+            transform: rotate(45deg);
+        }
+
+        @keyframes floatBubbleAbove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-6px); }
+        }
+
         .dev-tag {
             position: absolute;
             bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(255, 0, 127, 0.3);
             border: 1px solid #ff007f;
             backdrop-filter: blur(10px);
             padding: 2px 12px;
             border-radius: 12px;
             font-family: 'Fira Code', monospace;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: #ffffff;
             font-weight: 600;
             letter-spacing: 1.5px;
@@ -425,7 +471,7 @@
         .discord-username { font-size: 0.88rem; font-weight: 600; color: #ffffff; }
         .discord-status { font-size: 0.74rem; color: rgba(255, 255, 255, 0.75); }
 
-        /* Interactive Music Player Card (Inspired by Reference Screenshot) */
+        /* Interactive Music Player Card */
         .music-player-card {
             display: flex;
             align-items: center;
@@ -468,12 +514,13 @@
             text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
         }
 
+        /* Pink Progress Track */
         .progress-bar-container {
             width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+            position: relative;
             margin-bottom: 6px;
             cursor: pointer;
         }
@@ -482,8 +529,27 @@
             width: 0%;
             height: 100%;
             background: #ff007f;
+            border-radius: 3px;
             box-shadow: 0 0 10px #ff007f;
-            transition: width 0.1s linear;
+            position: relative;
+        }
+
+        /* Rotating Red Heart Handle */
+        .heart-handle {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            line-height: 1;
+            animation: rotateHeart 2.5s linear infinite;
+            filter: drop-shadow(0 0 6px #ff0055);
+            pointer-events: none;
+        }
+
+        @keyframes rotateHeart {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
         }
 
         .time-display {
@@ -515,7 +581,7 @@
 </head>
 <body>
 
-    <!-- Falling Snow Particles Canvas -->
+    <!-- Falling Snow Canvas -->
     <canvas id="snowCanvas"></canvas>
 
     <!-- Canvas Pink Cursor -->
@@ -567,7 +633,12 @@
             <div class="pink-aura-outer"></div>
             <div class="pink-aura-ring"></div>
             <img src="logo.png" id="mainPfp" alt="Arnav Profile" class="avatar">
+            
+            <!-- Dev Tag -->
             <div class="dev-tag">DEV</div>
+            
+            <!-- Animated Thought Bubble Status Badge (Above Middle with Distance) -->
+            <div class="pfp-status-bubble">💭 Hello :3</div>
         </div>
 
         <!-- Username & Verified Badge -->
@@ -594,7 +665,7 @@
             </div>
         </a>
 
-        <!-- Interactive Reference-Style Music Player Card -->
+        <!-- Interactive Music Player Card -->
         <div class="music-player-card">
             <div class="music-icon-box">
                 <i class="fa-solid fa-music"></i>
@@ -602,7 +673,10 @@
             <div class="music-info">
                 <div class="song-title">Whine in Brazil</div>
                 <div class="progress-bar-container" id="progressBarContainer">
-                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                    <div class="progress-bar-fill" id="progressBarFill">
+                        <!-- Rotating Red Heart Handle -->
+                        <div class="heart-handle">❤️</div>
+                    </div>
                 </div>
                 <div class="time-display">
                     <span id="currentTime">0:00</span>
@@ -621,6 +695,7 @@
     <!-- Audio Element -->
     <audio id="bgSong" loop preload="auto" playsinline>
         <source src="song.mp4" type="audio/mp4">
+        <source src="song.mp4" type="video/mp4">
     </audio>
 
     <script>
@@ -811,7 +886,6 @@
             }
         }
 
-        // Falling Snow / Aura Particle Effect (From Reference Screenshot)
         function initSnowEffect() {
             const canvas = document.getElementById("snowCanvas");
             const ctx = canvas.getContext("2d");
@@ -860,7 +934,6 @@
             drawFlakes();
         }
 
-        // Pink Glowing Particle Cursor Effect
         function initCursorEffect() {
             const canvas = document.getElementById("cursorCanvas");
             const ctx = canvas.getContext("2d");
