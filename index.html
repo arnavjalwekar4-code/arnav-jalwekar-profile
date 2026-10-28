@@ -102,6 +102,59 @@
             pointer-events: none;
         }
 
+        /* Climax Edit Overlay (cat.mp4) */
+        .climax-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 88888;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .climax-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            animation: editFlash 0.15s ease infinite alternate;
+        }
+
+        @keyframes editFlash {
+            0% { filter: contrast(1.2) brightness(1.1); }
+            100% { filter: contrast(1.6) brightness(1.4); }
+        }
+
+        .climax-video-box {
+            position: relative;
+            width: 85vw;
+            max-width: 650px;
+            aspect-ratio: 16 / 9;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid #ff007f;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.9), 0 0 100px rgba(0, 243, 255, 0.5);
+            transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .climax-overlay.active .climax-video-box {
+            transform: scale(1);
+        }
+
+        .climax-video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Fullscreen Video Background */
         .bg-container {
             position: fixed;
@@ -251,7 +304,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Multi-Layer Neon Cyber Aura Effect for Video Avatar */
+        /* Cyber Neon Aura Video Avatar */
         .avatar-wrap {
             position: relative;
             width: 135px;
@@ -411,7 +464,6 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
         }
 
-        /* Highlighted Location Styling */
         .location {
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.85);
@@ -605,6 +657,15 @@
     <!-- Canvas Pink Cursor -->
     <canvas id="cursorCanvas"></canvas>
 
+    <!-- Climax Edit Video Overlay (cat.mp4 triggers at 23s for 5 seconds) -->
+    <div id="climaxOverlay" class="climax-overlay">
+        <div class="climax-video-box">
+            <video id="climaxVideo" muted playsinline>
+                <source src="cat.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
     <!-- Click-to-Enter Overlay -->
     <div id="overlay" class="overlay">
         <div class="overlay-title">&lt;ARN4V.DEV /&gt;</div>
@@ -646,7 +707,7 @@
     <!-- Main Profile Content Container -->
     <div class="main-wrapper" id="mainWrapper">
         
-        <!-- Upgraded Cyber Neon Aura Video Avatar (gugugaga.mp4) -->
+        <!-- Cyber Neon Aura Video Avatar (gugugaga.mp4) -->
         <div class="avatar-wrap">
             <div class="pink-aura-outer"></div>
             <div class="aura-cyber-ring"></div>
@@ -671,7 +732,7 @@
 
         <p class="bio" id="userBio">just a dev with big dreams ♡ no ego, just code & kindness ☁️</p>
 
-        <!-- Highlighted San Fernando Valley Location -->
+        <!-- Location -->
         <div class="location">
             <i class="fa-solid fa-location-dot" style="font-size: 0.75rem; color: #ff007f;"></i> San Fernando Valley, <span class="location-highlight">Los Angeles</span>
         </div>
@@ -688,17 +749,17 @@
             </div>
         </a>
 
-        <!-- Interactive Music Player Card with pora.png Artwork -->
+        <!-- Interactive Music Player Card with Updated Song Title -->
         <div class="music-player-card">
             <div class="music-artwork-box">
                 <img src="pora.png" alt="Song Artwork" class="music-artwork">
             </div>
             <div class="music-info">
-                <div class="song-title">Whine in Brazil</div>
+                <div class="song-title">𝑬𝑳𝑨 𝑲É 𝑪𝑨𝑽𝑼𝑪𝑨𝑫𝑰𝑵𝑯𝑨</div>
                 <div class="progress-bar-container" id="progressBarContainer">
                     <div class="progress-bar-fill" id="progressBarFill">
                         <!-- Rotating Red Heart Handle -->
-                        <div class="heart-handle">🥀</div>
+                        <div class="heart-handle">❤️</div>
                     </div>
                 </div>
                 <div class="time-display">
@@ -736,6 +797,11 @@
             const progressBarContainer = document.getElementById("progressBarContainer");
             const currentTimeEl = document.getElementById("currentTime");
             const durationTimeEl = document.getElementById("durationTime");
+            
+            // Climax Edit Elements
+            const climaxOverlay = document.getElementById("climaxOverlay");
+            const climaxVideo = document.getElementById("climaxVideo");
+            let climaxTriggered = false;
 
             let isPlaying = false;
             let wasPlayingBeforeTabSwitch = false;
@@ -791,13 +857,32 @@
                 }
             });
 
-            // Music Player Time & Progress Bar Updater
+            // Music Player Time, Progress Bar, & Climax Trigger (at 23 seconds)
             bgSong.addEventListener("timeupdate", () => {
                 if (bgSong.duration) {
                     const progressPercent = (bgSong.currentTime / bgSong.duration) * 100;
                     progressBarFill.style.width = `${progressPercent}%`;
                     currentTimeEl.textContent = formatTime(bgSong.currentTime);
                     durationTimeEl.textContent = formatTime(bgSong.duration);
+
+                    // Trigger cat.mp4 edit at exactly 23 seconds for 5 seconds (up to 28 seconds)
+                    if (bgSong.currentTime >= 23 && bgSong.currentTime < 28 && !climaxTriggered) {
+                        climaxTriggered = true;
+                        climaxOverlay.classList.add("active");
+                        climaxVideo.currentTime = 0;
+                        climaxVideo.play().catch(() => {});
+
+                        // Automatically hide after 5 seconds (at 28 seconds mark)
+                        setTimeout(() => {
+                            climaxOverlay.classList.remove("active");
+                            climaxVideo.pause();
+                        }, 5000);
+                    }
+
+                    // Reset trigger if song loops back before 23 seconds
+                    if (bgSong.currentTime < 5) {
+                        climaxTriggered = false;
+                    }
                 }
             });
 
