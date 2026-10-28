@@ -6,8 +6,8 @@
     <title>arn4v</title>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Creepster for Halloween Horror Text) -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fira+Code:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -34,7 +34,7 @@
             color: #ffffff;
         }
 
-        /* Falling Snow Canvas */
+        /* Falling Halloween Embers Canvas */
         #snowCanvas {
             position: fixed;
             top: 0;
@@ -45,7 +45,7 @@
             z-index: 5;
         }
 
-        /* Custom Pink Cursor Canvas */
+        /* Custom Spooky Neon Orange Cursor Canvas */
         #cursorCanvas {
             position: fixed;
             top: 0;
@@ -76,14 +76,15 @@
         }
 
         .overlay-title {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.3rem;
-            color: #ff007f;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
+            font-family: 'Creepster', cursive;
+            font-size: 2.2rem;
+            color: #ff6600;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.9), 0 0 40px rgba(168, 85, 247, 0.7);
         }
 
         .overlay p {
+            font-family: 'Fira Code', monospace;
             font-size: 0.95rem;
             letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.8);
@@ -102,7 +103,89 @@
             pointer-events: none;
         }
 
-        /* Climax Edit Overlay (cat.mp4) */
+        /* 5-Second Spooky Toast Notification */
+        .notification-toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50px);
+            background: rgba(20, 8, 25, 0.9);
+            border: 2px solid #ff6600;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 14px 28px;
+            border-radius: 20px;
+            font-family: 'Creepster', cursive;
+            font-size: 1.5rem;
+            color: #ffffff;
+            letter-spacing: 2px;
+            z-index: 9000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 102, 0, 0.8), 0 0 50px rgba(168, 85, 247, 0.5);
+            text-align: center;
+        }
+
+        .notification-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification-highlight {
+            color: #ff6600;
+            text-shadow: 0 0 10px #ff6600, 0 0 20px #a855f7;
+        }
+
+        /* 5-Second Clean Countdown Screen (17s to 22s) */
+        .countdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(5, 2, 8, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            z-index: 85000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .countdown-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .countdown-number {
+            font-family: 'Creepster', cursive;
+            font-size: 7rem;
+            color: #ff6600;
+            text-shadow: 0 0 30px #ff6600, 0 0 60px #a855f7;
+            animation: countPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .countdown-sub {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes countPop {
+            0% { transform: scale(0.4); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Climax Edit Video Overlay (cat.mp4 triggers at 22s) */
         .climax-overlay {
             position: fixed;
             top: 0;
@@ -139,8 +222,8 @@
             aspect-ratio: 16 / 9;
             border-radius: 20px;
             overflow: hidden;
-            border: 3px solid #ff007f;
-            box-shadow: 0 0 50px rgba(255, 0, 127, 0.9), 0 0 100px rgba(0, 243, 255, 0.5);
+            border: 3px solid #ff6600;
+            box-shadow: 0 0 50px rgba(255, 102, 0, 0.9), 0 0 100px rgba(168, 85, 247, 0.5);
             transform: scale(0.85);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -198,7 +281,7 @@
 
         .icon-btn {
             background: rgba(20, 8, 25, 0.65);
-            border: 1px solid rgba(255, 0, 127, 0.35);
+            border: 1px solid rgba(255, 102, 0, 0.35);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             color: white;
@@ -213,7 +296,7 @@
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 0, 127, 0.15);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 102, 0, 0.15);
         }
 
         .icon-btn-square {
@@ -222,10 +305,10 @@
         }
 
         .icon-btn:hover, .icon-btn:active {
-            background: rgba(255, 0, 127, 0.3);
-            border-color: rgba(255, 0, 127, 0.8);
+            background: rgba(255, 102, 0, 0.3);
+            border-color: rgba(255, 102, 0, 0.8);
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.6);
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.6);
         }
 
         /* Volume Control Wrap */
@@ -234,7 +317,7 @@
             align-items: center;
             gap: 8px;
             background: rgba(20, 8, 25, 0.65);
-            border: 1px solid rgba(255, 0, 127, 0.35);
+            border: 1px solid rgba(255, 102, 0, 0.35);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             height: 42px;
@@ -259,8 +342,8 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #ff007f;
-            box-shadow: 0 0 10px #ff007f;
+            background: #ff6600;
+            box-shadow: 0 0 10px #ff6600;
         }
 
         /* Bottom-Left View Counter */
@@ -274,7 +357,7 @@
             font-size: 0.85rem;
             color: rgba(255, 255, 255, 0.9);
             background: rgba(20, 8, 25, 0.65);
-            border: 1px solid rgba(255, 0, 127, 0.3);
+            border: 1px solid rgba(255, 102, 0, 0.3);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             padding: 8px 16px;
@@ -304,7 +387,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Cyber Neon Aura Video Avatar */
+        /* Cyber Halloween Video Avatar (gugugaga.mp4) */
         .avatar-wrap {
             position: relative;
             width: 135px;
@@ -319,7 +402,7 @@
             position: absolute;
             top: -18px; left: -18px; right: -18px; bottom: -18px;
             border-radius: 50%;
-            background: conic-gradient(from 0deg, #ff007f, #00f3ff, #bf00ff, #ff007f);
+            background: conic-gradient(from 0deg, #ff6600, #a855f7, #ff9900, #ff6600);
             animation: spinAura 4s linear infinite, auraPulseWave 2.2s ease-in-out infinite alternate;
             filter: blur(14px);
             opacity: 0.9;
@@ -329,7 +412,7 @@
             position: absolute;
             top: -10px; left: -10px; right: -10px; bottom: -10px;
             border-radius: 50%;
-            background: conic-gradient(from 180deg, transparent 20%, #ff007f 60%, #00f3ff 90%, transparent 100%);
+            background: conic-gradient(from 180deg, transparent 20%, #ff6600 60%, #a855f7 90%, transparent 100%);
             animation: spinAura 3s linear infinite;
             filter: blur(2px);
             opacity: 0.85;
@@ -339,9 +422,9 @@
             position: absolute;
             top: -5px; left: -5px; right: -5px; bottom: -5px;
             border-radius: 50%;
-            border: 2px dashed #00f3ff;
+            border: 2px dashed #ff9900;
             animation: spinCounter 7s linear infinite;
-            filter: drop-shadow(0 0 10px #ff007f);
+            filter: drop-shadow(0 0 10px #ff6600);
         }
 
         @keyframes spinAura { 100% { transform: rotate(360deg); } }
@@ -359,7 +442,7 @@
             object-fit: cover;
             border: 2px solid rgba(255, 255, 255, 0.95);
             z-index: 2;
-            box-shadow: 0 0 35px rgba(255, 0, 127, 0.95), inset 0 0 15px rgba(0, 243, 255, 0.6);
+            box-shadow: 0 0 35px rgba(255, 102, 0, 0.95), inset 0 0 15px rgba(168, 85, 247, 0.6);
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -415,8 +498,8 @@
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 0, 127, 0.3);
-            border: 1px solid #ff007f;
+            background: rgba(255, 102, 0, 0.3);
+            border: 1px solid #ff6600;
             backdrop-filter: blur(10px);
             padding: 2px 12px;
             border-radius: 12px;
@@ -426,32 +509,32 @@
             font-weight: 600;
             letter-spacing: 1.5px;
             z-index: 3;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
         }
 
-        /* Username & Verified Badge */
+        /* Spooky Halloween Username */
         .username-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 6px;
             justify-content: center;
         }
 
         .username {
-            font-size: 1.9rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 20px rgba(255, 0, 127, 0.8);
-            background: linear-gradient(135deg, #ffffff 30%, #ff2a8d 100%);
+            font-family: 'Creepster', cursive;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(255, 102, 0, 0.9), 0 0 45px rgba(168, 85, 247, 0.7);
+            background: linear-gradient(135deg, #ffffff 30%, #ff6600 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .verified-badge {
-            color: #ff007f;
-            font-size: 1.25rem;
-            filter: drop-shadow(0 0 12px rgba(255, 0, 127, 0.9));
+            color: #ff6600;
+            font-size: 1.35rem;
+            filter: drop-shadow(0 0 12px rgba(255, 102, 0, 0.9));
         }
 
         /* Bio & Location */
@@ -476,9 +559,9 @@
         }
 
         .location-highlight {
-            color: #ff007f;
+            color: #ff6600;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.8);
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.8);
         }
 
         /* Discord Pill Widget */
@@ -487,7 +570,7 @@
             align-items: center;
             gap: 14px;
             background: rgba(20, 8, 25, 0.6);
-            border: 1px solid rgba(255, 0, 127, 0.35);
+            border: 1px solid rgba(255, 102, 0, 0.35);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             padding: 10px 20px 10px 12px;
@@ -499,10 +582,10 @@
         }
 
         .discord-card:hover {
-            background: rgba(255, 0, 127, 0.25);
-            border-color: rgba(255, 0, 127, 0.7);
+            background: rgba(255, 102, 0, 0.25);
+            border-color: rgba(255, 102, 0, 0.7);
             transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 16px 45px rgba(255, 0, 127, 0.4);
+            box-shadow: 0 16px 45px rgba(255, 102, 0, 0.4);
         }
 
         .discord-avatar-wrap {
@@ -545,7 +628,7 @@
             align-items: center;
             gap: 15px;
             background: rgba(20, 8, 25, 0.65);
-            border: 1px solid rgba(255, 0, 127, 0.35);
+            border: 1px solid rgba(255, 102, 0, 0.35);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             padding: 12px 18px;
@@ -560,8 +643,8 @@
             height: 46px;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 0, 127, 0.5);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+            border: 1px solid rgba(255, 102, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
             flex-shrink: 0;
         }
 
@@ -581,10 +664,10 @@
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 6px;
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
         }
 
-        /* Pink Progress Track */
+        /* Pumpkin Progress Bar Track */
         .progress-bar-container {
             width: 100%;
             height: 6px;
@@ -598,13 +681,13 @@
         .progress-bar-fill {
             width: 0%;
             height: 100%;
-            background: #ff007f;
+            background: #ff6600;
             border-radius: 3px;
-            box-shadow: 0 0 10px #ff007f;
+            box-shadow: 0 0 10px #ff6600;
             position: relative;
         }
 
-        /* Rotating Red Heart Handle */
+        /* Rotating Pumpkin Handle */
         .heart-handle {
             position: absolute;
             right: -8px;
@@ -613,7 +696,7 @@
             font-size: 12px;
             line-height: 1;
             animation: rotateHeart 2.5s linear infinite;
-            filter: drop-shadow(0 0 6px #ff0055);
+            filter: drop-shadow(0 0 6px #ff6600);
             pointer-events: none;
         }
 
@@ -644,20 +727,31 @@
         }
 
         .music-controls i:hover {
-            color: #ff007f;
+            color: #ff6600;
             transform: scale(1.15);
         }
     </style>
 </head>
 <body>
 
-    <!-- Falling Snow Canvas -->
+    <!-- Falling Halloween Embers Canvas -->
     <canvas id="snowCanvas"></canvas>
 
-    <!-- Canvas Pink Cursor -->
+    <!-- Custom Neon Cursor Canvas -->
     <canvas id="cursorCanvas"></canvas>
 
-    <!-- Climax Edit Video Overlay (cat.mp4 triggers at 23s for 5 seconds) -->
+    <!-- 5-Second Delayed Toast Notification (HAPPY HALLOWEEN YALL :3) -->
+    <div id="notificationToast" class="notification-toast">
+        🎃 <span class="notification-highlight">HAPPY HALLOWEEN YALL :3</span> 👻
+    </div>
+
+    <!-- 5-Second Clean Countdown Overlay -->
+    <div id="countdownOverlay" class="countdown-overlay">
+        <div class="countdown-sub">&lt; EDIT DROP IN &gt;</div>
+        <div id="countdownNumber" class="countdown-number">5</div>
+    </div>
+
+    <!-- Climax Edit Video Overlay (cat.mp4 triggers at 22s for 5 seconds) -->
     <div id="climaxOverlay" class="climax-overlay">
         <div class="climax-video-box">
             <video id="climaxVideo" muted playsinline>
@@ -668,7 +762,7 @@
 
     <!-- Click-to-Enter Overlay -->
     <div id="overlay" class="overlay">
-        <div class="overlay-title">&lt;ARN4V.DEV /&gt;</div>
+        <div class="overlay-title">ARN4V.DEV</div>
         <p>[ click anywhere to enter ]</p>
     </div>
 
@@ -707,7 +801,7 @@
     <!-- Main Profile Content Container -->
     <div class="main-wrapper" id="mainWrapper">
         
-        <!-- Cyber Neon Aura Video Avatar (gugugaga.mp4) -->
+        <!-- Cyber Avatar Video (gugugaga.mp4) -->
         <div class="avatar-wrap">
             <div class="pink-aura-outer"></div>
             <div class="aura-cyber-ring"></div>
@@ -724,7 +818,7 @@
             <div class="pfp-status-bubble">💭 Hello :3</div>
         </div>
 
-        <!-- Username & Verified Badge -->
+        <!-- Spooky Halloween Username -->
         <div class="username-container">
             <h1 class="username">Arnav</h1>
             <i class="fa-solid fa-circle-check verified-badge" title="Verified Developer"></i>
@@ -734,7 +828,7 @@
 
         <!-- Location -->
         <div class="location">
-            <i class="fa-solid fa-location-dot" style="font-size: 0.75rem; color: #ff007f;"></i> San Fernando Valley, <span class="location-highlight">Los Angeles</span>
+            <i class="fa-solid fa-location-dot" style="font-size: 0.75rem; color: #ff6600;"></i> San Fernando Valley, <span class="location-highlight">Los Angeles</span>
         </div>
 
         <!-- Discord Card Widget -->
@@ -749,7 +843,7 @@
             </div>
         </a>
 
-        <!-- Interactive Music Player Card with Updated Song Title -->
+        <!-- Interactive Music Player Card with pora.png Artwork -->
         <div class="music-player-card">
             <div class="music-artwork-box">
                 <img src="pora.png" alt="Song Artwork" class="music-artwork">
@@ -758,8 +852,8 @@
                 <div class="song-title">𝑬𝑳𝑨 𝑲É 𝑪𝑨𝑽𝑼𝑪𝑨𝑫𝑰𝑵𝑯𝑨</div>
                 <div class="progress-bar-container" id="progressBarContainer">
                     <div class="progress-bar-fill" id="progressBarFill">
-                        <!-- Rotating Red Heart Handle -->
-                        <div class="heart-handle">❤️</div>
+                        <!-- Pumpkin Progress Handle -->
+                        <div class="heart-handle">🎃</div>
                     </div>
                 </div>
                 <div class="time-display">
@@ -776,9 +870,13 @@
 
     </div>
 
-    <!-- Audio Element (Using holy.mp3) -->
+    <!-- Audio Elements -->
     <audio id="bgSong" loop preload="auto" playsinline>
         <source src="holy.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="sfxAudio" preload="auto">
+        <source src="sfx.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -787,6 +885,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             const overlay = document.getElementById("overlay");
             const bgSong = document.getElementById("bgSong");
+            const sfxAudio = document.getElementById("sfxAudio");
             const bgVideo = document.getElementById("bgVideo");
             const audioToggleBtn = document.getElementById("audioToggleBtn");
             const audioIcon = document.getElementById("audioIcon");
@@ -798,6 +897,14 @@
             const currentTimeEl = document.getElementById("currentTime");
             const durationTimeEl = document.getElementById("durationTime");
             
+            // Toast Notification
+            const notificationToast = document.getElementById("notificationToast");
+
+            // Countdown Elements
+            const countdownOverlay = document.getElementById("countdownOverlay");
+            const countdownNumber = document.getElementById("countdownNumber");
+            let lastShownNumber = -1;
+
             // Climax Edit Elements
             const climaxOverlay = document.getElementById("climaxOverlay");
             const climaxVideo = document.getElementById("climaxVideo");
@@ -825,7 +932,23 @@
                     isPlaying = true;
                     updateAudioUI(true);
                 }).catch(err => console.log("Audio unlock error:", err));
+
+                // Trigger 5-second delay for "HAPPY HALLOWEEN YALL :3" text + sfx.mp3
+                setTimeout(() => {
+                    notificationToast.classList.add("show");
+                    playSfx();
+
+                    // Automatically hide notification after 4 seconds
+                    setTimeout(() => {
+                        notificationToast.classList.remove("show");
+                    }, 4000);
+                }, 5000);
             };
+
+            function playSfx() {
+                sfxAudio.currentTime = 0;
+                sfxAudio.play().catch(() => {});
+            }
 
             overlay.addEventListener("click", enterSite);
             overlay.addEventListener("touchstart", enterSite, { passive: true });
@@ -857,7 +980,7 @@
                 }
             });
 
-            // Music Player Time, Progress Bar, & Climax Trigger (at 23 seconds)
+            // Music Player Time, Progress Bar, Silent Countdown (17s-22s), ONLY 1 SFX + Video Drop (at 22s)
             bgSong.addEventListener("timeupdate", () => {
                 if (bgSong.duration) {
                     const progressPercent = (bgSong.currentTime / bgSong.duration) * 100;
@@ -865,23 +988,51 @@
                     currentTimeEl.textContent = formatTime(bgSong.currentTime);
                     durationTimeEl.textContent = formatTime(bgSong.duration);
 
-                    // Trigger cat.mp4 edit at exactly 23 seconds for 5 seconds (up to 28 seconds)
-                    if (bgSong.currentTime >= 23 && bgSong.currentTime < 28 && !climaxTriggered) {
+                    // 1. Silent Countdown Screen (17s to 22s) -> Countdown to 22s Drop
+                    if (bgSong.currentTime >= 17 && bgSong.currentTime < 22) {
+                        if (!countdownOverlay.classList.contains("active")) {
+                            countdownOverlay.classList.add("active");
+                        }
+                        
+                        const currentSec = Math.floor(bgSong.currentTime);
+                        const countLeft = 22 - currentSec; // 5, 4, 3, 2, 1
+
+                        if (countLeft !== lastShownNumber && countLeft >= 1 && countLeft <= 5) {
+                            lastShownNumber = countLeft;
+                            countdownNumber.textContent = countLeft;
+                            countdownNumber.style.animation = 'none';
+                            countdownNumber.offsetHeight;
+                            countdownNumber.style.animation = 'countPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        }
+                    } else {
+                        if (countdownOverlay.classList.contains("active")) {
+                            countdownOverlay.classList.remove("active");
+                        }
+                    }
+
+                    // 2. Trigger SFX ONLY ONCE + cat.mp4 Edit at exactly 22 seconds
+                    if (bgSong.currentTime >= 22 && bgSong.currentTime < 27 && !climaxTriggered) {
                         climaxTriggered = true;
+                        countdownOverlay.classList.remove("active");
+                        
+                        // PLAY SFX EXACTLY ONCE RIGHT WHEN THE VIDEO DROPS AT 22s
+                        playSfx();
+
                         climaxOverlay.classList.add("active");
                         climaxVideo.currentTime = 0;
                         climaxVideo.play().catch(() => {});
 
-                        // Automatically hide after 5 seconds (at 28 seconds mark)
+                        // Automatically hide edit popup after 5 seconds (at 27s)
                         setTimeout(() => {
                             climaxOverlay.classList.remove("active");
                             climaxVideo.pause();
                         }, 5000);
                     }
 
-                    // Reset trigger if song loops back before 23 seconds
+                    // Reset triggers if song loops back before 17 seconds
                     if (bgSong.currentTime < 5) {
                         climaxTriggered = false;
+                        lastShownNumber = -1;
                     }
                 }
             });
@@ -1013,16 +1164,17 @@
                     y: Math.random() * height,
                     r: Math.random() * 2.5 + 1,
                     d: Math.random() * 1 + 0.5,
-                    opacity: Math.random() * 0.7 + 0.3
+                    opacity: Math.random() * 0.7 + 0.3,
+                    color: Math.random() > 0.5 ? "rgba(255, 102, 0, 0.8)" : "rgba(168, 85, 247, 0.8)"
                 });
             }
 
             function drawFlakes() {
                 ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 
                 for (let i = 0; i < numFlakes; i++) {
                     const f = flakes[i];
+                    ctx.fillStyle = f.color;
                     ctx.globalAlpha = f.opacity;
                     ctx.beginPath();
                     ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
@@ -1032,7 +1184,7 @@
                     f.x += Math.sin(f.y * 0.02) * 0.5;
 
                     if (f.y > height) {
-                        flakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d, opacity: f.opacity };
+                        flakes[i] = { x: Math.random() * width, y: 0, r: f.r, d: f.d, opacity: f.opacity, color: f.color };
                     }
                 }
                 requestAnimationFrame(drawFlakes);
@@ -1073,7 +1225,7 @@
                     this.speedY = (Math.random() - 0.5) * 1.5;
                     this.life = 1;
                     this.decay = Math.random() * 0.02 + 0.015;
-                    this.color = `#ff007f`;
+                    this.color = `#ff6600`;
                 }
 
                 update() {
@@ -1095,7 +1247,7 @@
                 ctx.clearRect(0, 0, width, height);
 
                 ctx.globalAlpha = 0.85;
-                ctx.strokeStyle = "rgba(255, 0, 127, 0.9)";
+                ctx.strokeStyle = "rgba(255, 102, 0, 0.9)";
                 ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.arc(mouse.x, mouse.y, 9, 0, Math.PI * 2);
